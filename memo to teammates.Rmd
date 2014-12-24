@@ -1,0 +1,102 @@
+---
+title: ""
+output: html_document
+bibliography: citations.bib
+---
+###Survey instruments, data processing and analysis plan
+
+#### 1. Previously stated objectives
+
+**Primary objectives**:
+
+1. To assess knowledge, attitudes, and practices towards haze and N95 mask usage among Singapore residents,	
+    - What is the knowledge level regarding haze and preventive	measures against harmful effects?
+    - What is the self-reported	effect of haze on Singapore residents? (in terms of symptoms, work/school affected, healthcare visits)	
+    - What are the preventive measures taken by	Singapore residents during haze?	
+2. To assess knowledge, attitudes, and practices towards N95	masks usage during the haze among Singapore residents
+3. To assess proficiency of Singapore residents	in donning N95 respirators 
+
+**Secondary objectives**: 
+
+1. To understand factors associated with increased self-reported severity of symptoms
+2. To find out the factors associated with taking/not taking measures against haze
+3. To find out factors associated with usage of	N95 masks
+4. To research the factors associated with N95 mask fit	proficiency
+
+#### 2. Literature review
+
+
+
+#### 3. Redefining our objectives
+
+Objectives have not changed a lot, but are now stated more explicitly with analysis and subsequent communication of findings in mind. The KHAN95 study aims to investigate, with regards to air pollution caused by the 2013 SEA Haze event, in a large public housing estate in Singapore, the following domains:
+
+1. **Knowledge** of: 
+    a. Causes of haze 
+    b. Health effects of haze
+    c. Health-agency recommended measures that reduce personal exposure to haze
+2. **Perceptions/Attitudes**:
+    a. Emotional reaction to haze
+    b. Perceived risk of personal harm from haze
+    c. Perceived severity of haze
+    
+3. **Behaviours/Practices**:
+    + Took health-agency recommended actions to reduce personal exposure to haze (including wearing an N95 mask)
+    
+4. Others
+    + Pass/Fail Visual Mask Fit Test
+
+Domains 1a-c, 2a-b are predictors. Domains 2c, 3 and 4 are outcomes.  
+
+#### 4. Survey Questionnaire
+
+- Demographic information
+    + Age
+    + Gender
+    + Education level
+    + Occupation
+    + Income quintile
+
+- Physical health
+    + Presence of chronic diseases with are exacerbated during haze:
+        - Congestive Cardiac Failure
+        - Obstructive Lung Disease: COPD/Asthma
+    + Tobacco use
+
+#### 5. Data analysis
+
+When analyzing survey questionnaires studying a social-behavioural phenomenon, there are two main considerations:
+
+1. Measurement theory is concerned with creating tools (i.e. questions) that accurately measure a particular trait. The theory behind it is that questions that measure a single trait should be highly correlated to each other [@costello2005best]. Methods exists to solve the following issues [@masaki2010factor]:
+    1. **Screening via Principal Components Analysis, Parallel analysis**: Reduce noise/variance by removing unrelated/nonspecific questionnaire items
+    2. **Exploratory Factor Analysis**: Define clearly/explore the underlying relationships between different questions and ensure that our questions measure a particular trait well
+    3. **Factor score extraction (e.g. Bartlett scores)**: Compute unbiased representations of an individual's score of in particular trait without having to make a subjective decision on how to weight each question [@bartlett1950].
+
+2. Structural theory is concerned with testing hypotheses. We have a theoretical construct in that we think certain traints (e.g. higher knowledge) might cause certain outcomes/behaviors (e.g. higher personal protective behavior). These constructs are bridged (formally *contruct operationalization*) to the data via measures that we identified using measurement theory [@shmueli2010]:
+    1. Unbiased estimates from factor scores can be used to represent a particular individual's scores on a certain domain [@distefano2009understanding]
+    2. Hypothesis testing can be performed using **regression models (e.g. linear regression, ANOVA, logistic regression)** using the factors as predictor variables in combination with other stuff you want to control for [@rummel1977applied]
+    - There are alternatives such as Structural Equation Modeling but those are firmly in the realm of social science research
+
+#### 6. Why go through all this trouble?
+
+Someone interested in reading about our research will want to know:
+
+1. Did our questionnaire accurately measure the domains we claimed it did? 
+    + What is the evidence? 
+        - Questionnaire-design -> inteviewer training -> Questionnaire validation -> Subsequent analysis
+    + How did we derive these domains from the data?
+     
+2. What is the practical siginificance?
+    + Multivariate techniques allow us to model characteristics of the survey participants with outcome measures like:
+        a. PASS/FAIL Mask Fit ~ Age + Income + Education + **KNOWLEDGE**
+            - We can investigate if **KNOWLEDGE** is significantly associated with visual mask fit pass.
+        b. PRACTICE:TOOK_MEASURES ~ Age + Income + Education + KNOWLEDGE + ATTITUDES/PERCEPTIONS
+            - We can investigate if **KNOWLEDGE** and **risk PERCEPTION** is associated with taking personal protective measures
+            - The policy implication will be that public education/information campaigns need to be directed at increasing **KNOWLEDGE** and **risk PERCEPTION**
+    + Can we individual questions for regression analysis?
+        - Yes, but it will be impossible to include sufficient questions to control for each domain has 3-4 questions. This will lead to increased variance in the model and decreased accuracy.
+
+
+#### References
+
+

@@ -6,6 +6,22 @@ output: html_document
 
 ---
 
+### Overview
+
+- There are two main objectives
+1. Test **measurement theory** - do our survey items capture a certain trait accurately?
+2. Test **structural theory** - hypothesis testing
+
+- What we can achieve from EFA:
+1. Explore the **actual correlations** between our items; not just theorectical correlations (some questionnaire items might end up capturing none or more than one trait and we can't perform hypothesis testing with that item)
+2. It allows us to trim away some items or construct new factors (traits) to explain our data
+3. Sometime there are traits that are not measured at all properly by all our survey questions (and we have to add some)
+
+- General workflow:
+1. PCA screening
+2. EFA
+3. Regression modeling
+
 ### Generate random survey data (n=500)
 
 - Q1-3 are correlated
@@ -113,9 +129,9 @@ Parallel analysis suggests **`r test.parallel$nfact` factors** are to be extract
 
 ### Step 2. EFA: Factor analysis with the number of factors selected by PA
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library("GPArotation")
-test.fa <- fa(r=test.cor$correlations,nfactors=test.parallel$nfact)
+test.fa <- fa(r=test.cor$correlations,nfactors=test.parallel$nfact,rotate="promax")
 test.fa
 ```
 
@@ -141,14 +157,17 @@ This step is identical to that performed during PCA
 
 ### Step 3. Refined factor score computation
 
-Three main methods exist:
+- Three main methods exist:
 1. Regression Scores
 2. Bartlett Scores
 3. Anderson-Rubin Scores
 
 ### Step 4. Determining the validity of the factor scores computed
 
-Grice (2001) suggests researchers examine the degree of indeterminacy in their factor solutions using three different measures: (1) validity – evidence of correlational relationships between factor scores and factor(s); (2) univocality- the extent to which factor scores are adequately or insufficiently correlated with other factors in the same analysis; and (3) correlational accuracy – which reports the extent to which correlations among the estimated factor scores match the correlations among the factors themselves. 
+- Grice (2001) suggests researchers examine the degree of indeterminacy in their factor solutions using three different measures:
+1. validity – evidence of correlational relationships between factor scores and factor(s)
+2. univocality- the extent to which factor scores are adequately or insufficiently correlated with other factors in the same analysis
+3. correlational accuracy – which reports the extent to which correlations among the estimated factor scores match the correlations among the factors themselves. 
 
 **The Bartlett score was used with the above factor analysis**
 ```{r, echo=TRUE}
