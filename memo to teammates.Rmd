@@ -9,14 +9,14 @@ bibliography: citations.bib
 
 **Primary objectives**:
 
-1. To assess knowledge, attitudes, and practices towards haze and N95 mask usage among Singapore residents,	
+1. To assess knowledge, attitudes, and practices towards haze and N95 mask usage among Singapore residents,
     - What is the knowledge level regarding haze and preventive	measures against harmful effects?
-    - What is the self-reported	effect of haze on Singapore residents? (in terms of symptoms, work/school affected, healthcare visits)	
-    - What are the preventive measures taken by	Singapore residents during haze?	
+    - What is the self-reported	effect of haze on Singapore residents? (in terms of symptoms, work/school affected, healthcare visits)
+    - What are the preventive measures taken by	Singapore residents during haze?
 2. To assess knowledge, attitudes, and practices towards N95	masks usage during the haze among Singapore residents
-3. To assess proficiency of Singapore residents	in donning N95 respirators 
+3. To assess proficiency of Singapore residents	in donning N95 respirators
 
-**Secondary objectives**: 
+**Secondary objectives**:
 
 1. To understand factors associated with increased self-reported severity of symptoms
 2. To find out the factors associated with taking/not taking measures against haze
@@ -25,30 +25,140 @@ bibliography: citations.bib
 
 #### 2. Literature review
 
+Knowledge, attitudes and practices of the lay public has been studied in other air pollution settings. Two articles studying this phenomenon are summarized and discussed here.
+
+##### Article 1 [@evans1988]:
+
+Evans et, al. investigated psychological reactions to air pollution in Los Angeles measuring the following:
+
+1. Knowledge and beliefs about air pollution
+    a. Rated smog in the city they lived:
+        - (1-10 where 10 = area in US with most smog)
+    b. Perceived smog on day of interview
+        - (1 = No smog to 3 = Heavy Smog)
+    c. Believed that smog had any negative effects on their personal health
+        - (1 = No to 3 = Very negative)
+    d. What is the rank order of the importance of four principal causes of smog
+        - (Automobiles, industrial sources, trucks and buses, airplanes)
+        - Correlation between repondent's rankings and the above correct ranking was calculated
+2. Coping Behaviors
+    a. "Some people say that the smog problem in the LA air basin is exaggerated and other people say it is not. What do you think? Do you think the problem is exaggerated or not?"
+        - (1 = Yes, Very exaggerated to 3= No, Not exaggerated)
+    b. "Do you believe anything could be done to reduce smog in the LA metropolitan region?"
+        - (1 = Definitely yes to 4 = Definitely not)
+    c. "Will smog be reduced if most people in used car pools or mass transportation alternatives?"
+        - (1 = No to 3 = Yes)
+    d. "How many times in the last week did you actively seek information about smog?"
+        - n times
+    e. "How many times in the past 2 weeks did you complain about smog to family or friends?"
+        - n times
+3. Compliance with health advisories during air pollution episodes
+    a. Whether they used transportation alternatives
+        - (1 =  The same amount, 2= somewhat more, 3= a lot more)
+    b. "Did you restrict your outdoor activities during high pollution periods?"
+        - 0 = Same to 2 = Change a lot
+4. Psychological health
+    a. Center for Epidemiologic Studies-depression scale (CESD)
+    b. Anxiety and hostility subscales of SCL-90
+        - standard measure of psychological symptoms for nonclinical populations
+
+**Analysis performed were threefold**:
+
+1. Description of individual knowledge, beliefs and perceptions of air pollution
+2. Behaviors for coping with air pollution.
+    a. Compliance with air pollution health advisories
+    b. Modeling using regression models including demographic information, perceptions of smog, repsiratory impairment status and ambient ozone levels
+3. Investigate possible associations between ozone and measures of psychological health
+
+**Findings**:
+
+1. 51.2% of individuals followed state advisories to reduce outcome exposure (only about half)
+3. Personal beliefs of negative consequences were a strong predictor of compliance to health advisories
+
+##### Article 2 [@zeidner1988]:
+
+This was a study done on 900 households in the Haifa region in northern Israel in 1988. Like in the Evans paper, chronic urban air pollution was studied.  
+
+1. Demogrpahic information: sex, SES: occupation, income, ethnic group
+2. Epidemiologicla indicators: 1 = polluted area, 0 =0 nonpolluted area
+3. Traits of anxiety,
+4. Perceptions and attitudes with respect to air pollution
+    a. Perceived degree of severity of ambient pollution in one's own neighbourhood
+        - (0 = no pollution, 6 = heavy pollution)
+    b. Degree of anxiety aroused by air pollution
+        - (Likert-type rating scle; 5 = extremely high, 1 = extremely low)
+    c. Degree of anger aroused by air pollution
+        - (4-step pictorial scale; 4 = maximal, 1= minimal)
+    d. Method of coping with air pollution
+        - (1 = active, 0 = passive)
+    e. Perceived inadequacy of state and municipal budgets devoted to air pollution control
+        - (2 = inadequate, 1 = adequate, 0 = too large)
+    f. Willingness to engage in volunteer work directed towards air pollution abatement
+        - (0 to 99 hours per months)
+    g. Willingness to pay higher taxes to control air pollution (improve conditions or prevent worsening of present levels)
+        - (Maximum percentage increase in city tax payment)
+
+**Analysis included**:
+1. Standardization of scales.
+2. Matrix of intercorrelations among major variables were presented in the paper (i.e. correlation matrix)
+3. A Path Diagram
+
+**Findings**:
+
+1. Negative affective responses (e.g. anger) were associated higher perceived severity
+2. 52% of respondents coped with air pollution by passive means (i.e. ignoring pollution)
+
+##### Article 3 [@skov1991]:
+
+Skov et, al. studied air pollution in Copenhagen "on the theoretical background of the health belief model and the health locus of control model, we studied the knowledge and beliefs about air pollution and the modifications of health behaviour brought about by information to the public about projected levels of air pollution, with special emphasis on reduction of outdoor activity and avoidance of car driving."
+
+**Findings**:
+
+1. The respondents were almost universally knowledgeable about the prime emission source and concerned about the possible health effects of the air pollution in the area.
+2. Avoidance of outdoor activity was:
+    a. associated with personal experiences of symptoms ascribed to the air pollution, employment status, and with female sex,
+    b. but not with knowledge or beliefs about the degree or health implications of the air pollution.
+3. The willingness to avoid car driving was positively associated with the belief that one can oneself influence one's health and with female sex.
+    4. Lung diseased respondents were generally more prone to protect themselves than the healthy, both by avoiding outdoor activity and by being less willing to avoid car driving.
+
+"The study partly supported the underlying theories of the determinants of health behaviour, but also indicated a need for a broader theoretical framework, incorporating aspects of the respondents' life situation and personal experience which would be relevant to the specific type of health behaviour under study."
 
 
-#### 3. Redefining our objectives
+##### Article 4:
 
-Objectives have not changed a lot, but are now stated more explicitly with analysis and subsequent communication of findings in mind. The KHAN95 study aims to investigate, with regards to air pollution caused by the 2013 SEA Haze event, in a large public housing estate in Singapore, the following domains:
+While health effects (which include diseases from virtually every system) and effects on hospitalization have been studied extensively elsewhere (and should be cited in our paper), a study done in Thailand examined symptoms from forest fires concentrating on specific pollutants [@wiwa2014]:
+1. PM10 has been reported to cause blurred vision
+2. CO: lower lung and heart symptoms
+3. NO2: nosebleed, larynx symptoms, dry cough, lower lung symptoms, heart symptoms and eye irritation
+4. SO2: Swelling feet, skin symptoms, eye irritation, red eyes, blurred visions
+5. O3: ??PROTECTIVE for running nose, burning nose, dry cough, body rash, red eyes and burred vision
 
-1. **Knowledge** of: 
-    a. Causes of haze 
-    b. Health effects of haze
-    c. Health-agency recommended measures that reduce personal exposure to haze
-2. **Perceptions/Attitudes**:
-    a. Emotional reaction to haze
-    b. Perceived risk of personal harm from haze
-    c. Perceived severity of haze
+##### A brief discussion
+
+##### Knowledge:
+
+The NEA website has a massively comphrehensive webpage on haze (http://www.e101.gov.sg/haze/faqs.htm). We should lift questions from there.
+
+#####Personal protective behaviours:
+
+The first three papers examined chronic urban air pollution, not acute pollution events like haze. Much attention in the first two studies was paid to Personality Traits (e.g. Anxiety and Anger) and its correlation with perceived severity. Economic analysis (willingness to increase tax) was performed in the second paper. Measures taken by respondents to reduce personal exposure were collapsed into categories such as:
+
+1. Reduction of outdoor activites [@evans1988][@skov1991]
+2. Method of coping with air pollution [@zeidner1988]   
     
-3. **Behaviours/Practices**:
-    + Took health-agency recommended actions to reduce personal exposure to haze (including wearing an N95 mask)
-    
-4. Others
-    + Pass/Fail Visual Mask Fit Test
+Our questionnaire includes more items, most importantly, N95 respirators. It might be wise to cut down on the number of categories to capture only **health-agency recommended measures** and not ask about a bunch of random items (e.g. vicks, air purifiers).
 
-Domains 1a-c, 2a-b are predictors. Domains 2c, 3 and 4 are outcomes.  
+##### Symptoms:
 
-#### 4. Survey Questionnaire
+The final paper on symptoms captured responses during forest fire pollution events. In our study, recall bias (~2 years) is too severe to accurately capture the range and severity symptoms whereas it might still be feasible to capture change in behaviours (especially use of certain measures). 
+
+##### Use of healthcare resources:
+
+Use of healthcare resources has been studied in aggregate setings over long time-series and large areas (entire cities) e.g. in the APHEA2 study [@atkinson2001]. It is debatable if we should examine individual level use of healthcare resources especially when most admissions are directly related to existing chronic lung disease and proving that point again is not very interesting. It might be interesting to show that increasing personal protection for chronic lung diseased individuals leads to lower uptake of health services but that is better done in a **case-control** setting as our pickup rate for chronic lung disease will be very low.
+
+#### 3. The direction ahead
+
+The KHAN95 study aims to investigate, with regards to air pollution caused by the 2013 SEA Haze event, in a large public housing estate in Singapore, the following domains:
 
 - Demographic information
     + Age
@@ -63,12 +173,29 @@ Domains 1a-c, 2a-b are predictors. Domains 2c, 3 and 4 are outcomes.
         - Obstructive Lung Disease: COPD/Asthma
     + Tobacco use
 
-#### 5. Data analysis
+1. **Knowledge** of:
+    a. Causes of haze
+    b. Health effects of haze
+    c. Health-agency recommended measures that reduce personal exposure to haze
+2. **Perceptions/Attitudes**:
+    a. Perceived risk of personal harm from haze
+    b. Perceived severity of haze
+
+3. **Behaviours/Practices**:
+    + Took health-agency recommended actions to reduce personal exposure to haze (including wearing an N95 mask)
+
+4. Others
+    + Pass/Fail Visual Mask Fit Test
+
+Domains 1a-c, 2a are predictors. Domains 2b, 3 and 4 are outcomes.  
+
+#### 4. Data analysis
 
 When analyzing survey questionnaires studying a social-behavioural phenomenon, there are two main considerations:
 
 1. Measurement theory is concerned with creating tools (i.e. questions) that accurately measure a particular trait. The theory behind it is that questions that measure a single trait should be highly correlated to each other [@costello2005best]. Methods exists to solve the following issues [@masaki2010factor]:
-    1. **Screening via Principal Components Analysis, Parallel analysis**: Reduce noise/variance by removing unrelated/nonspecific questionnaire items
+    1. **Screening via Principal Components Analysis, Parallel analysis**: Reduce noise/variance by removing unrelated/nonspecific questionnaire items. 
+        - **Parallel analysis is computationally expensive (it will take hours on our personal computers)**
     2. **Exploratory Factor Analysis**: Define clearly/explore the underlying relationships between different questions and ensure that our questions measure a particular trait well
     3. **Factor score extraction (e.g. Bartlett scores)**: Compute unbiased representations of an individual's score of in particular trait without having to make a subjective decision on how to weight each question [@bartlett1950].
 
@@ -81,11 +208,11 @@ When analyzing survey questionnaires studying a social-behavioural phenomenon, t
 
 Someone interested in reading about our research will want to know:
 
-1. Did our questionnaire accurately measure the domains we claimed it did? 
-    + What is the evidence? 
+1. Did our questionnaire accurately measure the domains we claimed it did?
+    + What is the evidence?
         - Questionnaire-design -> inteviewer training -> Questionnaire validation -> Subsequent analysis
-    + How did we derive these domains from the data?
-     
+    + How did we derive domains from the data?
+
 2. What is the practical siginificance?
     + Multivariate techniques allow us to model characteristics of the survey participants with outcome measures like:
         a. PASS/FAIL Mask Fit ~ Age + Income + Education + **KNOWLEDGE**
@@ -98,5 +225,3 @@ Someone interested in reading about our research will want to know:
 
 
 #### References
-
-

@@ -120,12 +120,11 @@ test <- data[-index,]
 
 #### Step 1b Screening items
 
-A training set (n=200) was sampled from the 500 observations.
 Non-linear principal components analysis with Promax rotation is performed:
 
 ```{r,echo=TRUE, warning=FALSE, message=FALSE}
 library(psych)
-train.cor <- hetcor(train,ML=T,std.err=F)
+train.cor <- hetcor(train,ML=F,std.err=F)
 #### Run PCA
 pca <- principal(train.cor$correlations, nfactors=10, rotate="promax")
 pca
@@ -139,12 +138,6 @@ pca
 1. `>`0.50-0.60 on main factor and <0.20-0.30 on others
 2. We can discard questions that don't meet this criteria
 - *Make sure that the results make theorectical sense!*
-- Questions: 5 and 15 can be discarded
-
-```{r, echo=TRUE}
-test <- test[,-c(5,15)] #remove Q5 and Q15
-```
-
 
 #### Step 2. Exploratory Factor Analysis using test data (n=300)
 
@@ -152,25 +145,20 @@ test <- test[,-c(5,15)] #remove Q5 and Q15
 2. Identify which variables load on to which factors
 3. Remove variables which do not load onto any factors
 
-*New data should be used*, the remaining observations (n=300) from the original 500 will be used as a test set for the next part.
+*New data should be used*, we use that data that was not used just now (n=300)
 
 #### Step 2. EFA: Parallel analysis
 
 ```{r,echo=TRUE,message=FALSE, warning=FALSE, cache=TRUE}
-test.cor <- hetcor(test,ML=T,std.err=F) #[,c(1:5,9:13)]
+test.cor <- hetcor(test,ML=F,std.err=F)
 options(mc.cores=8)
 start.time <- Sys.time()
-test.parallel <- fa.parallel.poly(test.cor$correlations,global=F)
+test.parallel <- fa.parallel.poly(test.cor$correlations, SMC=T,global=F)
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 ```
 
-```{r}
-install.packages("random.polychor.pa")
-library(random.polychor.pa)
-random.polychor.pa(nvar=13, n.ss=300, 5, data.matrix=data.matrix(test), q.eigen = 0.95, r.seed = 1, diff.fact=FALSE, distr="NULL", comparison = "random", fit.pa=FALSE, print.all=FALSE)
-```
 
 #### Step 2. EFA: Parallel analysis (cont.)
 
