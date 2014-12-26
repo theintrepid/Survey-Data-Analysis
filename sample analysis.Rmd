@@ -3,33 +3,48 @@ title: ""
 author: ""
 date: ""
 output: html_document
+bibliography: analysis_citations.bib
 ---
 
-### A sample analysis (complete with fake data)
+### Introduction
 
-What we can achieve from EFA:
+This article presents a sample data analysis using methods described in two separate articles/tutorial papers [@masaki2010] [@distefano2009understanding]. To recap this is what we aim to achieve from this part of the analysis.
 
-1. Explore the **actual correlations** between our items; not just theorectical correlations (some questionnaire items might end up capturing none or more than one trait and we can't perform hypothesis testing with that item)
+1. Explore the **empirical correlations** between our items; not just theorectical correlations (some questionnaire items might end up capturing none or more than one trait and we can't perform hypothesis testing with that item)
 2. It allows us to trim away some items or construct new factors (traits) to explain our data
-3. Sometime there are traits that are not measured at all properly by all our survey questions (and we have to add some)
+3. Sometime there are traits that are not measured at all properly by all our survey questions (and we have to add some).
 
-- General workflow:
+**Our general workflow**:
+
 1. PCA screening
-2. EFA
+2. EFA (Parallel Analysis, Screening, Factor Analysis)
 3. Regression modeling
 
-#### Generate random survey data (n=500)
+### Methods
 
-- Q1-3 are highly correlated (pearson's r > 0.70)
-- Q3-6 are moderately correlated (r < 0.60)
-- Q7-9 are noise (r ~ 0)
-- Q10-12 are highly correlated (r > 0.70)
-- Q13-15 are moderately correlated (r < 0.60)
+An **artificial dataset** containing 500 observations of 15 questions was generated to simulate a 15 question-long survey form conducted on (n=500) respondents. They are designed as if asking about two different themes (e.g. perceived severity of haze, knowledge of protective measures) on a 7 point Likert-type scale.
 
-1. The data is designed such that Q1-6 measure one component (e.g. Knowledge) and Q10-15 measure another component (e.g. Perceptions). 
-2. The first 3 questions in each group are high quality and correlate highly with each other
-3. The next 3 questions in each group are lower quality and only moderately correlated with each other
-4. Q7-9 are pure noise and represent very poorly designed variables
+Theme 1:
+
+- Q1-3 are highly correlated (*r<sub>pc</sub>* > 0.70)
+- Q3-6 are moderately correlated (0.50 < *r<sub>pc</sub>* < 0.60)
+
+Theme 2:
+
+- Q10-12 are highly correlated (*r<sub>pc</sub>* > 0.70)
+- Q13-15 are moderately correlated (0.50 < *r<sub>pc</sub>* < 0.60)
+
+Noise:
+
+- Q7-9 are pure noise (*r<sub>pc</sub>* < 0.10) 
+
+Note: *r<sub>pc</sub>* stands for Polychoric correlation coefficient [@ekstrom2011]
+
+The questions were designed on the premise that:
+
+1. The first 3 questions in each group are high quality and correlate highly with each other
+2. The next 3 questions in each group are lower quality and only moderately correlated with each other
+3. Q7-9 are pure noise and represent very poorly designed variables
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 mod.cor <- function(x1,r=0.6, n=500) {                    # length of vector
@@ -50,10 +65,11 @@ mod.cor <- function(x1,r=0.6, n=500) {                    # length of vector
         x3 <- x3 * 10 * 2
         return(round(x3,digits=0))
 }
-
 ```
-                                 # check correlation = rho
-```{r,message=FALSE,warning=FALSE,echo=TRUE}
+
+**Responses were coded (Strongly Disagree = -3 to Strongly Agree = 3)**
+    
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
 gen.data <- function(seed) { #Create fake data
         set.seed(seed)
         x <- sample(1:3, 500, replace=TRUE)
@@ -93,26 +109,33 @@ gen.data <- function(seed) { #Create fake data
         data                   
 }
 data <- gen.data(1)
+head(data)
 ```
 
-#### View correlation matrix
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+balancer <- function(data) {
+    balance <- data.frame(matrix(c(-3:3),nrow=7,ncol=15))
+    names(balance) <- names(data)
+    data <- rbind(data,balance)
+    data <- data[sample(nrow(data),replace=F),]    
+    data
+}
+```
 
-As terms a non-linear (i.e. likert data), we will use a **polychoric correlation matrix**
+All analyses were performed using R: A language and environment for statistical computing [@r2014]. Polychoric correlation matrices were calcuated using the "polycor" package [@polycor2010]. Functions from the "psych" packages were used for factor analysis [@psych2014]. Parallel analysis was performed with [@fabio2014].
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(psych)
 library(polycor)
-hetcor(data,ML=F,std.err=F)
+library(random.polychor.pa)
+library("GPArotation")
 ```
 
-#### Sample a training set (n=200)
-
-```{r, echo=TRUE}
-index <- sample(nrow(data), 200)
-train <- data[index, ]
-test <- data[-index,]
-```
+### Results and Discussion
 
 #### Step 1a. Generate items
+
+Although artificial data was used in our analysis, the first step in the entire process is actually creating the survey instrument to measure the traits in our theoretical framework.
 
 - Create items (i.e. Questions) that supposedly tap into the target construct
 - Questions should be as expansive as possible: maximize face value
@@ -120,89 +143,98 @@ test <- data[-index,]
 
 #### Step 1b Screening items
 
-A training set (n=200) was sampled from the 500 observations.
-Non-linear principal components analysis with Promax rotation is performed:
+The data set (n=500) was partioned into a training set (n=200) and test set (n=300) via simple random sampling to reduce bias. The training set was used for for item screening via PCA.
 
-```{r,echo=TRUE, warning=FALSE, message=FALSE}
-library(psych)
-train.cor <- hetcor(train,ML=T,std.err=F)
+```{r, echo=TRUE}
+index <- sample(nrow(data), 200)
+train <- data[index, ]
+test <- data[-index,]
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+train <- balancer(train)
+test <- balancer(test)
+```
+
+Non-linear principal components analysis with promax rotation was performed:
+
+- We look for variables that load clearly onto one component
+- Try to minimize cross-loading: i.e. high loadings on >1 component
+- A cut-off that is generally accepted (but should be reported)
+1. More than 0.50-0.60 on main factor and <0.20-0.30 on others
+2. We can discard questions that don't meet this criteria
+- *Make sure that the results make theorectical sense!*
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE,cache=TRUE}
+train.cor <- hetcor(train,ML=F,std.err=F)
 #### Run PCA
 pca <- principal(train.cor$correlations, nfactors=10, rotate="promax")
 pca
 ```
 
-#### Step 1b Screening items (cont)
+Questions: Q5 (0.83 on PC2 and -0.32 on PC6) Q15 (0.89 on PC6 and 0.39 on PC1) can be discarded based on this criteria.
 
-- We look for variables that load clearly onto one component
-- Try to minimize cross-loading: i.e. high loadings on >1 component
-- A cut-off that is generally accepted (but should be reported)
-1. `>`0.50-0.60 on main factor and <0.20-0.30 on others
-2. We can discard questions that don't meet this criteria
-- *Make sure that the results make theorectical sense!*
-- Questions: 5 and 15 can be discarded
+***
 
-```{r, echo=TRUE}
-test <- test[,-c(5,15)] #remove Q5 and Q15
+```{r, echo=FALSE}
+test <- test[,-c(5,15)] #remove Q5 and Q15 on test data set
 ```
 
 
-#### Step 2. Exploratory Factor Analysis using test data (n=300)
+#### Step 2. Exploratory Factor Analysis using the test set (n=300)
 
 1. Determine number of factors underlying the data
 2. Identify which variables load on to which factors
 3. Remove variables which do not load onto any factors
 
-*New data should be used*, the remaining observations (n=300) from the original 500 will be used as a test set for the next part.
+*New data should be used*, the remaining observations i.e. the test set (n=300) will be used or the next part.
 
-#### Step 2. EFA: Parallel analysis
+#### EFA: Parallel analysis
 
-```{r,echo=TRUE,message=FALSE, warning=FALSE, cache=TRUE}
-test.cor <- hetcor(test,ML=T,std.err=F) #[,c(1:5,9:13)]
-options(mc.cores=8)
-start.time <- Sys.time()
-test.parallel <- fa.parallel.poly(test.cor$correlations,global=F)
-end.time <- Sys.time()
-time.taken <- end.time - start.time
-time.taken
-```
-
-```{r}
-install.packages("random.polychor.pa")
-library(random.polychor.pa)
-random.polychor.pa(nvar=13, n.ss=300, 5, data.matrix=data.matrix(test), q.eigen = 0.95, r.seed = 1, diff.fact=FALSE, distr="NULL", comparison = "random", fit.pa=FALSE, print.all=FALSE)
-```
-
-#### Step 2. EFA: Parallel analysis (cont.)
-
-1. 500-1000 artificial datasets are generated with the same number of variables and same number of observations
+1. 500-1000 artificial datasets are generated with the same number of variables and same number of observations 
+    - Note: 10 were used in this sample analysis to save time; the 10 simulations took 1 minute (500 will take ~1 hr and 1000 will take ~2hrs)
 2. Variables in these datasets are random variables
 3. Factor analysis is performed on each of these datasets and the eigenvalues of each factor generated are extracted
 3. Repeating this many times will allow us to calculate the mean eigenvalue of a factor from datasets similar to what we have
 4. An eigenvalue less than the mean would mean that a particular factor extracted is no more substantial (explains less) than a random factor (which really has no meaning); those factors are rejected 
 
-#### Step 2. EFA: Parallel analysis (cont.)
-
-Parallel analysis suggests **`r test.parallel$nfact` factors** are to be extracted
-
-#### Step 2. EFA: Factor analysis with the number of factors selected by PA
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-library("GPArotation")
-test.fa <- fa(r=test.cor$correlations,nfactors=test.parallel$nfact,rotate="promax")
-test.fa
+```{r, echo=TRUE,message=TRUE,warnings=FALSE,cache=TRUE}
+random.polychor.pa(nrep=10, data.matrix=data.matrix(test), q.eigen = 0.99, r.seed = 1, diff.fact=FALSE, distr="NULL", comparison = "random", fit.pa=FALSE, print.all=FALSE)
+#
 ```
 
+**Parallel analysis suggests that 2 factors are to be extracted**. Factor analysis was performed with the number of factors selected by Parallel Analysis.
 
-#### Step 2. EFA: Screening items
+#### EFA: Screening items
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE,cache=TRUE}
+test.cor <- hetcor(test, ML=F, std.err=F)
+test.fa <- fa(r=test.cor$correlations,nfactors=2,rotate="promax")
+test.fa
+#
+```
 
 This step is identical to that performed during PCA
 
 - We look for factors that load clearly onto one component
 - Try to minimize cross-loading: i.e. high loadings on >1 component
 - A cut-off that is generally accepted (but should be reported)
-1. `>`0.50-0.60 on main factor and <0.20-0.30 on others
+1. More than 0.50-0.60 on main factor and <0.20-0.30 on others
 2. We can discard questions that don't meet this criteria
 - *Make sure that the results make theorectical sense!*
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,cache=TRUE}
+test.final <- test[,-c(6:8)]
+test.final.cor <- hetcor(test.final, ML=F, std.err=F)
+test.final.fa <- fa(r=test.final.cor$correlations,nfactors=2,rotate="promax")
+test.final.fa
+#
+```
+
+From the factor analysis above: 
+
+- The noise variables (Q7,Q8,Q9) don't load on either of the factors and can be discarded
+- The remaining questions (Q4-6, 15) were designed not be highly correlated with the the two factors but nonetheless did not meet the criteria to be discarded.
 
 #### Step 3. Creating factor scores
 
@@ -212,24 +244,22 @@ This step is identical to that performed during PCA
 2. Obtain unbiased estimates of a true factor score
 3. Preserves relationships between factors
 
-#### Step 3. Refined factor score computation
-
-- Three main methods exist:
+- Three main methods exist to compute refined factor scores:
 1. Regression Scores
 2. Bartlett Scores
 3. Anderson-Rubin Scores
 
 #### Step 4. Determining the validity of the factor scores computed
 
-- Grice (2001) suggests researchers examine the degree of indeterminacy in their factor solutions using three different measures:
+- [@grice2001computing] suggests researchers examine the degree of indeterminacy in their factor solutions using three different measures:
 1. validity – evidence of correlational relationships between factor scores and factor(s)
 2. univocality- the extent to which factor scores are adequately or insufficiently correlated with other factors in the same analysis
 3. correlational accuracy – which reports the extent to which correlations among the estimated factor scores match the correlations among the factors themselves. 
 
 **The Bartlett score was used with the above factor analysis**
 ```{r, echo=TRUE}
-bartlett.scores <- factor.scores(data.matrix(test),f=test.fa,method="Bartlett")$scores
-test.wscores <- cbind(test,bartlett.scores)
+bartlett.scores <- factor.scores(data.matrix(test.final),f=test.final.fa,method="Bartlett")$scores
+test.wscores <- cbind(test.final,bartlett.scores)
 ```
 
 #### Step 5. Using the factor scores for regression
@@ -237,3 +267,16 @@ test.wscores <- cbind(test,bartlett.scores)
 - Factors are new variables!
 - They must be checked for assumptions (e.g. normality) before conducting hypothesis testing!
 - Regression modeling can be performed with factors as predictors/outcomes
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,cache=TRUE}
+names(test.wscores)[names(test.wscores)=="MR1"] <- "Factor1"
+names(test.wscores)[names(test.wscores)=="MR2"] <- "Factor2"
+par(mfrow=c(1,2))
+hist(test.wscores$Factor1, main="Factor 1", xlab="Bartlett Score", breaks=20)
+hist(test.wscores$Factor2, main="Factor 2", xlab="Bartlett Score", breaks=20)
+#
+```
+
+The scores are unfortunately not normal with the bogus data generated for this bogus analysis (Log transforming or Square root did not address this issue adequately). This assumption will have to be checked before performing further analysis.
+
+### References
