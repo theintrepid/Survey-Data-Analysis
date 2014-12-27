@@ -233,8 +233,9 @@ test.final.fa
 
 From the factor analysis above: 
 
+- The "good questions" (Q1-3, Q10-12) load highly (>0.80) onto Factors 1 and 2 respectively
 - The noise variables (Q7,Q8,Q9) don't load on either of the factors and can be discarded
-- The remaining questions (Q4-6, 15) were designed not be highly correlated with the the two factors but nonetheless did not meet the criteria to be discarded.
+- The remaining questions (Q4,6,13 & 14) were designed not be highly correlated with the the two factors but nonetheless did not meet the criteria to be discarded
 
 #### Step 3. Creating factor scores
 
