@@ -8,11 +8,14 @@ bibliography: analysis_citations.bib
 
 ### Introduction
 
-This article presents a sample data analysis using methods described in two separate articles/tutorial papers [@masaki2010] [@distefano2009understanding]. To recap this is what we aim to achieve from this part of the analysis.
+This article presents a sample data analysis using methods described in two separate articles/tutorial papers [@masaki2010] [@distefano2009understanding]. The aims are:
 
-1. Explore the **empirical correlations** between our items; not just theorectical correlations (some questionnaire items might end up capturing none or more than one trait and we can't perform hypothesis testing with that item)
-2. It allows us to trim away some items or construct new factors (traits) to explain our data
-3. Sometime there are traits that are not measured at all properly by all our survey questions (and we have to add some).
+1. Questionnaire validation
+    - Explore the **empirical correlations** between our items; not just theorectical correlations (some questionnaire items might end up capturing none or more than one trait and we can't perform hypothesis testing with that item)
+    - It allows us to trim away some items or construct new factors (traits) to explain our data
+    - Sometime there are traits that are not measured at all properly by all our survey questions (and we have to add some).
+2. Optimal scaling 
+    - a composite measure of a particular domain can be calculated and used for subsequent analyses
 
 **Our general workflow**:
 
@@ -22,14 +25,14 @@ This article presents a sample data analysis using methods described in two sepa
 
 ### Methods
 
-An **artificial dataset** containing 500 observations of 15 questions was generated to simulate a 15 question-long survey form conducted on (n=500) respondents. They are designed as if asking about two different themes (e.g. perceived severity of haze, knowledge of protective measures) on a 7 point Likert-type scale.
+An **artificial dataset** containing 500 observations of 15 questions was generated to simulate a 15 question-long survey form conducted on (n=500) respondents. They are designed as if asking about two different themes on a 7 point Likert-type scale.
 
-Theme 1:
+Knowledge:
 
 - Q1-3 are highly correlated (*r<sub>pc</sub>* > 0.70)
 - Q3-6 are moderately correlated (0.50 < *r<sub>pc</sub>* < 0.60)
 
-Theme 2:
+Behaviour:
 
 - Q10-12 are highly correlated (*r<sub>pc</sub>* > 0.70)
 - Q13-15 are moderately correlated (0.50 < *r<sub>pc</sub>* < 0.60)
@@ -149,6 +152,7 @@ The data set (n=500) was partioned into a training set (n=200) and test set (n=3
 index <- sample(nrow(data), 200)
 train <- data[index, ]
 test <- data[-index,]
+test.original <- test
 ```
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
@@ -172,12 +176,12 @@ pca <- principal(train.cor$correlations, nfactors=10, rotate="promax")
 pca
 ```
 
-Questions: Q5 (0.83 on PC2 and -0.32 on PC6) Q15 (0.89 on PC6 and 0.39 on PC1) can be discarded based on this criteria.
+Q5 (0.83 on PC2 and -0.31 on PC7) can be discarded based on this criteria.
 
 ***
 
 ```{r, echo=FALSE}
-test <- test[,-c(5,15)] #remove Q5 and Q15 on test data set
+test <- test[,-5] #remove Q5 and Q15 on test data set
 ```
 
 
@@ -199,8 +203,8 @@ test <- test[,-c(5,15)] #remove Q5 and Q15 on test data set
 4. An eigenvalue less than the mean would mean that a particular factor extracted is no more substantial (explains less) than a random factor (which really has no meaning); those factors are rejected 
 
 ```{r, echo=TRUE,message=TRUE,warnings=FALSE,cache=TRUE}
-random.polychor.pa(nrep=10, data.matrix=data.matrix(test), q.eigen = 0.99, r.seed = 1, diff.fact=FALSE, distr="NULL", comparison = "random", fit.pa=FALSE, print.all=FALSE)
-#
+random.polychor.pa(nrep=10, data.matrix=data.matrix(test), q.eigen = 0.95, r.seed = 1, diff.fact=TRUE, distr="NULL", comparison = "random", fit.pa=FALSE, print.all=FALSE)
+#Set significance of factors at 95th quantile
 ```
 
 **Parallel analysis suggests that 2 factors are to be extracted**. Factor analysis was performed with the number of factors selected by Parallel Analysis.
@@ -224,7 +228,7 @@ This step is identical to that performed during PCA
 - *Make sure that the results make theorectical sense!*
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE,cache=TRUE}
-test.final <- test[,-c(6:8)]
+test.final <- test.original[,-c(5,7:9)]
 test.final.cor <- hetcor(test.final, ML=F, std.err=F)
 test.final.fa <- fa(r=test.final.cor$correlations,nfactors=2,rotate="promax")
 test.final.fa
@@ -235,49 +239,59 @@ From the factor analysis above:
 
 - The "good questions" (Q1-3, Q10-12) load highly (>0.80) onto Factors 1 and 2 respectively
 - The noise variables (Q7,Q8,Q9) don't load on either of the factors and can be discarded
-- The remaining questions (Q4,6,13 & 14) were designed not be highly correlated with the the two factors but nonetheless did not meet the criteria to be discarded
+- The remaining questions (Q4,6,13-15) were designed not be highly correlated with the the two factors but nonetheless did not meet the criteria to be discarded
 
 #### Step 3. Creating factor scores
 
 - Methods to create factor scores can be divided into non-refined and refined.
-- The latter combines PCA and common factor extraction methods to maximize validity by creating scores that are
-1. Highly correlated with a given factor
-2. Obtain unbiased estimates of a true factor score
-3. Preserves relationships between factors
-
+- The latter combines PCA and factor extraction methods to creating scores that may be, depending on the method chosen:
+    - Highly correlated with a given factor
+    - Obtain unbiased estimates of a true factor score
+    - Preserves relationships between factors
 - Three main methods exist to compute refined factor scores:
-1. Regression Scores
-2. Bartlett Scores
-3. Anderson-Rubin Scores
+    1. Regression Scores - **chosen for demonstration**
+    2. Bartlett Scores
+    3. Anderson-Rubin Scores - it has been noted that above two have certain issues with subsequent regression analysis [@skrondal2001regression].
 
-#### Step 4. Determining the validity of the factor scores computed
+#### Step 4. Determining the validity of the factor scores computed (not performed)
 
 - [@grice2001computing] suggests researchers examine the degree of indeterminacy in their factor solutions using three different measures:
 1. validity – evidence of correlational relationships between factor scores and factor(s)
 2. univocality- the extent to which factor scores are adequately or insufficiently correlated with other factors in the same analysis
 3. correlational accuracy – which reports the extent to which correlations among the estimated factor scores match the correlations among the factors themselves. 
 
-**The Bartlett score was used with the above factor analysis**
 ```{r, echo=TRUE}
-bartlett.scores <- factor.scores(data.matrix(test.final),f=test.final.fa,method="Bartlett")$scores
-test.wscores <- cbind(test.final,bartlett.scores)
+scores <- factor.scores(data.matrix(test.final),f=test.final.fa,method="regression")$scores
+test.wscores <- cbind(test.final,scores)
 ```
 
 #### Step 5. Using the factor scores for regression
 
-- Factors are new variables!
-- They must be checked for assumptions (e.g. normality) before conducting hypothesis testing!
+- Factors are new variables
+- They must be checked for assumptions (e.g. normality) before conducting hypothesis testing
 - Regression modeling can be performed with factors as predictors/outcomes
 
-```{r,echo=FALSE,message=FALSE,warning=FALSE,cache=TRUE}
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 names(test.wscores)[names(test.wscores)=="MR1"] <- "Factor1"
 names(test.wscores)[names(test.wscores)=="MR2"] <- "Factor2"
 par(mfrow=c(1,2))
-hist(test.wscores$Factor1, main="Factor 1", xlab="Bartlett Score", breaks=20)
-hist(test.wscores$Factor2, main="Factor 2", xlab="Bartlett Score", breaks=20)
+hist(test.wscores$Factor1, main="Knowledge", xlab="Factor Score", breaks=10)
+hist(test.wscores$Factor2, main="Behaviour", xlab="Factor Score", breaks=10)
 #
 ```
 
-The scores are unfortunately not normal with the bogus data generated for this bogus analysis (Log transforming or Square root did not address this issue adequately). This assumption will have to be checked before performing further analysis.
+Fitting a linear regression model with the formula: 
+<p>Practices = B<sub>0</sub> + B<sub>1</sub> *  Behavior
+
+> H<sub>0</sub>: Β<sub>1</sub> = 0<br>
+> H<sub>a</sub>: Β<sub>1</sub> ≠ 0
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(ggplot2)
+qplot(Factor1, Factor2, data=test.wscores, geom=c("point","smooth"),method="lm",main="Scatterplot of Knowledge score and Behavior score", xlab="Knowledge", ylab="Behavior") + theme_bw()
+summary(lm(Factor2 ~ Factor1, data=test.wscores)) 
+```
+
+**We fail to reject H<sub>0</sub> with p = 0.158**
 
 ### References
