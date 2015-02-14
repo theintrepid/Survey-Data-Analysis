@@ -65,16 +65,73 @@ test.final.cor <- hetcor(test.final, ML=F, std.err=F)
 test.final.fa <- fa(r=test.final.cor$correlations,nfactors=number,rotate="promax")
 test.final.fa
 
-#---------------Obtain factor scores-----------------
 
-scores <- factor.scores(data.matrix(test.final),f=test.final.fa,method="Anderson")$scores 
+# See Skrondal and Laake 2001
+#---------------Obtain factor scores [Explanatory - Regression]-----------------
+
+s.explain <- factor.scores(data.matrix(test.final),
+                          f=test.final.fa,method="regression")$scores[,1] 
 #Alternative methods include "regression", "Thurstone", "tenBerge", "Bartlett", "Harman","components"
-test.wscores <- cbind(test.final,scores)
+
+#---------------Obtain factor scores [Response - Bartlett]-----------------
+
+s.response <- factor.scores(data.matrix(test.final),
+                          f=test.final.fa,method="Bartlett")$scores[,2]
+
+#--------------------Combine into original data.frame-----------------
+
+test.wscores <- cbind(test.final,s.explain,s.response)
 
 #----------------Rename factors----------------
 names(test.wscores)[names(test.wscores)=="MR1"] <- "Factor1"
-#names(test.wscores)[names(test.wscores)=="MR2"] <- "Factor2"
+names(test.wscores)[names(test.wscores)=="MR2"] <- "Factor2"
 
 #---------------Output csv file--------------
 
 write.csv(test.wscores,file="output.csv")
+
+#---------------IRT model score--------------
+
+irt.poly <- polychoric(data.matrix(test.final))
+irt.mod <- irt.fa(irt.poly,nfactors=2,rotate="promax",fm="wls")
+irt.scores <- score.irt(irt.mod, data.matrix(test.final), 
+                        keys=NULL,cut = 0.3,bounds=c(-5,5),mod="logistic")
+irt.scores.extracted <- irt.scores[,1:2]
+names(irt.scores.extracted) <- c("Factor1","Factor2")
+
+lm(Factor2 ~ Factor1, data=irt.scores.extracted)
+
+#-------------Some useful plots-------------
+
+hist(irt.scores.extracted[,1])
+hist(irt.scores.extracted[,2])
+plot(irt.mod, type="ICC")
+plot(irt.mod, type="IIC")
+plot(irt.mod, type="test")
+
+#---------SEM-----------
+
+library(lavaan)
+
+myModel <- '
+        factor1 =~ Q1 + Q2 + Q3 + Q4 + Q6
+        factor2 =~ Q10 + Q11 + Q12 + Q13 + Q14 + Q15'
+cfa(myModel,data=test.final, estimator="WLS")
+
+#-------OpenMx------
+
+require(OpenMx)
+
+manifests <- names(test.final)
+latents <- c("Factor1","Factor2")
+factorModel <- mxModel("One Factor",
+                       type="RAM",
+                       manifestVars = manifests,
+                       latentVars = latents,
+                       mxPath(from=latents, to=manifests),
+                       mxPath(from=manifests, arrows=2),
+                       mxPath(from=latents, arrows=2,
+                              free=FALSE, values=1.0),
+                       mxData(cov(demoOneFactor), type="cov",
+                              numObs=500))
+summary(mxRun(factorModel))
